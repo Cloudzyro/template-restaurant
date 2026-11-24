@@ -1,0 +1,169 @@
+---
+// Sends to PUBLIC_FORM_ENDPOINT (Formspree, Basin, a Supabase function or similar).
+// With no endpoint set, the form opens the visitor's email app instead.
+import { site } from "../data/site";
+
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? "";
+const subject = `Private event inquiry for ${site.name}`;
+---
+
+<form
+  class="inquiry"
+  method="post"
+  action={endpoint || `mailto:${site.email}`}
+  data-endpoint={endpoint}
+  data-email={site.email}
+  data-subject={subject}
+>
+  {
+    !endpoint && (
+      <p class="note" role="note">
+        This form isn't connected yet, so sending it opens your email app. You can also write to us at{" "}
+        <a href={`mailto:${site.email}?subject=${encodeURIComponent(subject)}`}>{site.email}</a>.
+      </p>
+    )
+  }
+  <input type="hidden" name="_subject" value={subject} />
+  <div class="row">
+    <label>
+      <span>Your name</span>
+      <input name="name" autocomplete="name" required />
+    </label>
+    <label>
+      <span>Email</span>
+      <input name="email" type="email" autocomplete="email" required />
+    </label>
+  </div>
+  <div class="row">
+    <label>
+      <span>Phone <small>(optional)</small></span>
+      <input name="phone" type="tel" autocomplete="tel" />
+    </label>
+    <label>
+      <span>Preferred date</span>
+      <input name="date" type="date" />
+    </label>
+  </div>
+  <div class="row">
+    <label>
+      <span>Number of guests</span>
+      <input name="guests" type="number" min="2" max="60" inputmode="numeric" />
+    </label>
+    <label>
+      <span>Type of event</span>
+      <select name="event_type">
+        <option>Dinner party</option>
+        <option>Birthday or anniversary</option>
+        <option>Rehearsal dinner</option>
+        <option>Business dinner</option>
+        <option>Full buyout</option>
+        <option>Something else</option>
+      </select>
+    </label>
+  </div>
+  <label>
+    <span>Tell us about it</span>
+    <textarea name="message" rows="5" required></textarea>
+  </label>
+  <button class="btn btn-primary" type="submit">Send inquiry</button>
+  <p class="status" role="status" aria-live="polite"></p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>("form.inquiry").forEach((form) => {
+    const status = form.querySelector<HTMLElement>(".status")!;
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const { endpoint, email, subject } = form.dataset;
+      const data = new FormData(form);
+
+      if (!endpoint) {
+        const lines = [...data.entries()]
+          .filter(([key]) => !key.startsWith("_"))
+          .map(([key, value]) => `${key.replace(/_/g, " ")}: ${value}`);
+        window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject ?? "")}&body=${encodeURIComponent(lines.join("\n"))}`;
+        status.textContent = "Your email app should open with your details filled in.";
+        return;
+      }
+
+      const button = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
+      button.disabled = true;
+      status.textContent = "Sending...";
+      try {
+        const res = await fetch(endpoint, { method: "POST", body: data, headers: { Accept: "application/json" } });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        status.textContent = "Thank you. We've got your inquiry and will reply within two business days.";
+      } catch {
+        status.innerHTML = "";
+        status.append("Sorry, that didn't send. Please email us at ");
+        const link = Object.assign(document.createElement("a"), { href: `mailto:${email}`, textContent: email });
+        status.append(link, ".");
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+</script>
+
+<style>
+  .inquiry {
+    display: grid;
+    gap: 1.1rem;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: clamp(20px, 4vw, 36px);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.1rem;
+  }
+  label {
+    display: grid;
+    gap: 0.4rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  small {
+    font-weight: 500;
+    color: var(--muted);
+  }
+  input,
+  select,
+  textarea {
+    width: 100%;
+    font: inherit;
+    font-weight: 500;
+    color: var(--ink);
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 0.75rem 0.9rem;
+    min-height: 48px;
+  }
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 3px solid var(--ember-bright);
+    outline-offset: 1px;
+    border-color: var(--ember);
+  }
+  .note {
+    margin: 0;
+    padding: 0.9rem 1rem;
+    border-radius: 12px;
+    background: #f3e2cc;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+  .status {
+    margin: 0;
+    font-weight: 600;
+    min-height: 1.5em;
+  }
+  button {
+    justify-self: start;
+  }
+</style>

@@ -1,0 +1,195 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import { menu, menuIntro, dietaryTags, site } from "../data/site";
+
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+---
+
+<Base title="Menu" description={`The seasonal menu at ${site.name}: ${menu.map((s) => s.title.toLowerCase()).join(", ")}.`}>
+  <PageHero eyebrow="Seasonal menu" title="What's on the fire" text={menuIntro}>
+    <nav class="jump" aria-label="Menu sections">
+      {menu.map((s) => <a href={`#${slug(s.title)}`}>{s.title}</a>)}
+    </nav>
+  </PageHero>
+
+  <div class="wrap menu-wrap">
+    <dl class="legend" aria-label="Dietary key">
+      {
+        Object.entries(dietaryTags).map(([code, label]) => (
+          <div>
+            <dt class="tag">{code}</dt>
+            <dd>{label}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    {
+      menu.map((section) => (
+        <section class="menu-section" id={slug(section.title)} aria-labelledby={`${slug(section.title)}-h`}>
+          <header>
+            <h2 id={`${slug(section.title)}-h`}>{section.title}</h2>
+            {section.note && <p class="note">{section.note}</p>}
+          </header>
+          <ul>
+            {section.dishes.map((d) => (
+              <li>
+                <div class="dish-head">
+                  <h3>{d.name}</h3>
+                  <span class="dots" aria-hidden="true" />
+                  <span class="price">
+                    <span class="visually-hidden">Price: </span>${d.price}
+                  </span>
+                </div>
+                <p>{d.description}</p>
+                {d.tags && d.tags.length > 0 && (
+                  <ul class="tags" aria-label="Dietary information">
+                    {d.tags.map((t) => (
+                      <li class="tag" title={dietaryTags[t]}>
+                        <span aria-hidden="true">{t}</span>
+                        <span class="visually-hidden">{dietaryTags[t]}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+
+    <aside class="menu-cta">
+      <p>Ready to taste it?</p>
+      <a class="btn btn-primary" href={site.reservationUrl}>{site.reservationLabel}</a>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  .jump a {
+    color: #fff;
+    text-decoration: none;
+    border: 1px solid rgb(255 255 255 / 0.3);
+    border-radius: 999px;
+    padding: 0.45rem 1rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .jump a:hover {
+    background: rgb(255 255 255 / 0.1);
+  }
+  .menu-wrap {
+    padding-block: clamp(40px, 7vw, 80px);
+    max-width: 880px;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    margin: 0 0 2rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .legend div {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .legend dd {
+    margin: 0;
+  }
+  .tag {
+    display: inline-grid;
+    place-items: center;
+    min-width: 2.1rem;
+    height: 1.6rem;
+    padding: 0 0.35rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--olive);
+    color: var(--olive);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+  }
+  .menu-section {
+    scroll-margin-top: 90px;
+    padding-top: 2.5rem;
+    margin-top: 2.5rem;
+    border-top: 2px solid var(--ink);
+  }
+  .menu-section header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .menu-section h2 {
+    margin: 0;
+  }
+  .note {
+    margin: 0;
+    color: var(--ember);
+    font-weight: 600;
+    font-style: italic;
+  }
+  .menu-section > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.6rem;
+  }
+  .dish-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+  .dish-head h3 {
+    margin: 0;
+  }
+  .dots {
+    flex: 1;
+    border-bottom: 2px dotted #cdb9a3;
+    transform: translateY(-4px);
+    min-width: 1rem;
+  }
+  .price {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--ember);
+  }
+  .menu-section p {
+    margin: 0.3rem 0 0.5rem;
+    color: var(--muted);
+  }
+  .tags {
+    display: flex;
+    gap: 0.4rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .menu-cta {
+    margin-top: 4rem;
+    padding: 2rem;
+    text-align: center;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .menu-cta p {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+  }
+</style>

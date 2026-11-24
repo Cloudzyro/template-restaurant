@@ -1,0 +1,392 @@
+---
+import Base from "../layouts/Base.astro";
+import HeroArt from "../components/HeroArt.astro";
+import HoursToday from "../components/HoursToday.astro";
+import HoursTable from "../components/HoursTable.astro";
+import Art from "../components/Art.astro";
+import { site, home, menu, about, gallery, events } from "../data/site";
+
+const featured = menu.find((s) => s.title === "From the fire")?.dishes.slice(0, 3) ?? [];
+---
+
+<Base>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">{site.tagline}</span>
+        <h1>{home.heroTitle}</h1>
+        <p class="lede">{home.heroText}</p>
+        <div class="today-card">
+          <HoursToday />
+          <span class="where">{site.address.street}, {site.address.city}</span>
+        </div>
+        <div class="actions">
+          <a class="btn btn-light" href={site.reservationUrl}>{site.reservationLabel}</a>
+          <a class="btn btn-ghost" href="/menu/">See the menu</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <HeroArt />
+      </div>
+    </div>
+  </section>
+
+  <section class="section highlights" aria-labelledby="hl-title">
+    <div class="wrap">
+      <h2 id="hl-title" class="visually-hidden">Why guests come back</h2>
+      <ol class="hl-list">
+        {
+          home.highlights.map((h, i) => (
+            <li>
+              <span class="num">0{i + 1}</span>
+              <h3>{h.title}</h3>
+              <p>{h.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section menu-teaser" aria-labelledby="mt-title">
+    <div class="wrap split">
+      <div>
+        <span class="eyebrow">Tonight from the hearth</span>
+        <h2 id="mt-title">A menu that follows the seasons</h2>
+        <p class="lede">A few plates we're cooking right now. The full menu changes most weeks.</p>
+        <a class="btn btn-primary" href="/menu/">View the full menu</a>
+      </div>
+      <ul class="dish-list">
+        {
+          featured.map((d) => (
+            <li>
+              <div class="dish-head">
+                <h3>{d.name}</h3>
+                <span class="dots" aria-hidden="true" />
+                <span class="price">${d.price}</span>
+              </div>
+              <p>{d.description}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section chef" aria-labelledby="chef-title">
+    <div class="wrap chef-grid">
+      <figure class="chef-art">
+        <svg viewBox="0 0 400 480" role="img" aria-label="Illustrated portrait placeholder of the chef">
+          <rect width="400" height="480" rx="200" fill="#56633a"></rect>
+          <circle cx="200" cy="190" r="70" fill="#e9c9a5"></circle>
+          <path d="M130 160c0-60 140-60 140 0-30-16-110-16-140 0z" fill="#fbf7f0"></path>
+          <rect x="128" y="120" width="144" height="40" rx="20" fill="#fbf7f0"></rect>
+          <path d="M80 480c10-110 70-170 120-170s110 60 120 170z" fill="#fbf7f0"></path>
+          <path d="M200 310v170" stroke="#e2d3c0" stroke-width="4"></path>
+        </svg>
+      </figure>
+      <div>
+        <span class="eyebrow">{about.chefRole}</span>
+        <h2 id="chef-title">{about.chefName}</h2>
+        <blockquote>{about.quote}</blockquote>
+        <p>{about.paragraphs[0]}</p>
+        <a href="/about/">Read our story</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section gallery" id="gallery" aria-labelledby="gal-title">
+    <div class="wrap">
+      <span class="eyebrow">Inside Fig &amp; Ember</span>
+      <h2 id="gal-title">Around the dining room</h2>
+      <ul class="gal-grid">
+        {
+          gallery.map((g) => (
+            <li>
+              <figure>
+                <Art kind={g.art} label={g.caption} />
+                <figcaption>{g.caption}</figcaption>
+              </figure>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section visit" aria-labelledby="visit-title">
+    <div class="wrap visit-grid">
+      <div>
+        <span class="eyebrow">Visit us</span>
+        <h2 id="visit-title">Find your way to the fire</h2>
+        <address>
+          {site.address.street}<br />
+          {`${site.address.city}, ${site.address.region} ${site.address.postal}`}
+        </address>
+        <p>
+          <a href={`tel:${site.phone.replace(/[^\d+]/g, "")}`}>{site.phone}</a>
+        </p>
+        <div class="actions">
+          <a class="btn btn-primary" href={site.mapsUrl}>Get directions</a>
+          <a class="btn btn-ghost" href="/visit/">Parking and access</a>
+        </div>
+      </div>
+      <HoursTable />
+    </div>
+  </section>
+
+  <section class="section events-cta" aria-labelledby="ev-title">
+    <div class="wrap events-box">
+      <div>
+        <span class="eyebrow">Gatherings</span>
+        <h2 id="ev-title">{events.title}</h2>
+        <p>{events.points.join(". ")}.</p>
+      </div>
+      <a class="btn btn-light" href="/events/">Plan an event</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    background:
+      radial-gradient(70% 60% at 80% 70%, rgb(224 112 61 / 0.22), transparent 70%),
+      linear-gradient(180deg, #1f1510, #2b1c13);
+    color: #f6eadb;
+    overflow: hidden;
+  }
+  .hero .eyebrow {
+    color: var(--gold);
+  }
+  .hero h1 {
+    color: #fff;
+  }
+  .hero .lede {
+    color: #e0cfbb;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(24px, 5vw, 72px);
+    align-items: center;
+    padding-block: clamp(48px, 8vw, 96px) 0;
+  }
+  .hero-copy {
+    padding-bottom: clamp(48px, 8vw, 96px);
+  }
+  .today-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.25rem;
+    margin: 1.75rem 0;
+    padding: 1rem 1.25rem;
+    border-radius: 14px;
+    background: rgb(255 255 255 / 0.06);
+    border: 1px solid rgb(255 255 255 / 0.12);
+  }
+  .where {
+    color: #cdb9a3;
+    font-size: 0.95rem;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .hero-visual {
+    align-self: end;
+    max-width: 520px;
+    justify-self: center;
+    width: 100%;
+  }
+
+  .hl-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: clamp(24px, 4vw, 48px);
+  }
+  .num {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--ember);
+    font-weight: 700;
+    display: block;
+    border-top: 2px solid var(--ink);
+    padding-top: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .menu-teaser {
+    background: var(--paper);
+    border-block: 1px solid var(--line);
+  }
+  .split {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(32px, 6vw, 80px);
+    align-items: center;
+  }
+  .dish-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.75rem;
+  }
+  .dish-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+  .dish-head h3 {
+    margin: 0;
+  }
+  .dots {
+    flex: 1;
+    border-bottom: 2px dotted #cdb9a3;
+    transform: translateY(-4px);
+  }
+  .price {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--ember);
+  }
+  .dish-list p {
+    margin: 0.35rem 0 0;
+    color: var(--muted);
+  }
+
+  .chef-grid {
+    display: grid;
+    grid-template-columns: 0.75fr 1.25fr;
+    gap: clamp(32px, 6vw, 80px);
+    align-items: center;
+  }
+  .chef-art {
+    margin: 0;
+    max-width: 380px;
+  }
+  blockquote {
+    margin: 0 0 1.25rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+    line-height: 1.35;
+    color: var(--olive);
+  }
+
+  .gallery {
+    padding-top: 0;
+  }
+  .gal-grid {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .gal-grid li:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .gal-grid figure {
+    margin: 0;
+    position: relative;
+    height: 100%;
+    min-height: 200px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+  }
+  .gal-grid figcaption {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    right: 12px;
+    background: rgb(31 21 16 / 0.78);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.4rem 0.75rem;
+    border-radius: 10px;
+    width: fit-content;
+  }
+
+  .visit {
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+  }
+  .visit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(32px, 6vw, 80px);
+    align-items: start;
+  }
+  address {
+    font-style: normal;
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .events-cta {
+    padding-top: 0;
+    background: var(--paper);
+  }
+  .events-box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    background: var(--olive);
+    color: #f1ecdc;
+    border-radius: calc(var(--radius) * 1.5);
+    padding: clamp(28px, 5vw, 56px);
+  }
+  .events-box h2 {
+    color: #fff;
+  }
+  .events-box .eyebrow {
+    color: var(--gold);
+  }
+  .events-box p {
+    margin: 0;
+    max-width: 52ch;
+  }
+
+  @media (max-width: 860px) {
+    .hero-grid,
+    .split,
+    .chef-grid,
+    .visit-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-copy {
+      padding-bottom: 0;
+    }
+    .hero-visual {
+      max-width: 360px;
+    }
+    .gal-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .chef-art {
+      max-width: 260px;
+    }
+  }
+  @media (max-width: 520px) {
+    .gal-grid {
+      grid-template-columns: 1fr;
+    }
+    .gal-grid li:nth-child(1) {
+      grid-column: auto;
+      grid-row: auto;
+    }
+  }
+</style>

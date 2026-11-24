@@ -1,0 +1,96 @@
+---
+import { hours } from "../data/site";
+import { formatTime } from "../lib/hours";
+---
+
+<table class="hours-table">
+  <caption class="visually-hidden">Opening hours</caption>
+  <thead>
+    <tr>
+      <th scope="col">Day</th>
+      <th scope="col">Hours</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      hours.map((d) => (
+        <tr data-day={d.day}>
+          <th scope="row">{d.name}</th>
+          <td>
+            {d.closed || d.services.length === 0
+              ? "Closed"
+              : d.services.map((s) => (
+                  <span class="svc">
+                    <span class="svc-label">{s.label}</span> {formatTime(s.open)} to {formatTime(s.close)}
+                  </span>
+                ))}
+          </td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+<script>
+  import { site } from "../data/site";
+  const name = new Intl.DateTimeFormat("en-US", { timeZone: site.timeZone, weekday: "short" }).format(new Date());
+  const idx = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(name);
+  document.querySelectorAll(`.hours-table tr[data-day="${idx}"]`).forEach((row) => {
+    row.classList.add("is-today");
+    row.querySelector("th")?.insertAdjacentHTML("beforeend", ' <span class="today-tag">Today</span>');
+  });
+</script>
+
+<style>
+  .hours-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+  }
+  thead th {
+    text-align: left;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 0 0.6rem;
+  }
+  tbody th,
+  td {
+    text-align: left;
+    padding: 0.85rem 0;
+    border-top: 1px solid var(--line);
+    vertical-align: top;
+  }
+  tbody th {
+    font-weight: 700;
+    padding-right: 1rem;
+    white-space: nowrap;
+  }
+  td {
+    display: grid;
+    gap: 0.2rem;
+  }
+  .svc-label {
+    display: inline-block;
+    min-width: 4.5rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  :global(.is-today) th,
+  :global(.is-today) td {
+    color: var(--ember);
+  }
+  :global(.today-tag) {
+    display: inline-block;
+    margin-left: 0.35rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--ember);
+    color: #fff;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    vertical-align: middle;
+  }
+</style>

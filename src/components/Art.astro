@@ -1,0 +1,103 @@
+---
+// Illustrated placeholders for the gallery. Swap for your own photos when you have them.
+interface Props {
+  kind: "flame" | "leaf" | "fig" | "plate" | "glass" | "bread";
+  label: string;
+}
+const { kind, label } = Astro.props;
+
+const bg: Record<Props["kind"], [string, string]> = {
+  flame: ["#3a1c10", "#8f3513"],
+  leaf: ["#3e4a26", "#7b8a4c"],
+  fig: ["#4a2338", "#9a4a5e"],
+  plate: ["#e9dccb", "#cdb497"],
+  glass: ["#2b1a24", "#6b2f3d"],
+  bread: ["#b9773a", "#e4b06b"],
+};
+const [a, b] = bg[kind];
+const id = `g-${kind}`;
+---
+
+<svg class="art" viewBox="0 0 400 300" role="img" aria-label={label} preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color={a}></stop>
+      <stop offset="1" stop-color={b}></stop>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill={`url(#${id})`}></rect>
+  {
+    kind === "flame" && (
+      <g>
+        <path d="M200 40c22 46 80 70 80 150a80 80 0 0 1-160 0c0-44 26-66 40-96 6 26 20 40 32 46-6-44 0-74 8-100z" fill="#e0703d" />
+        <path d="M200 140c12 22 36 30 36 60a36 36 0 0 1-72 0c0-18 10-28 16-40 2 12 8 18 14 20-2-16 2-28 6-40z" fill="#f0bd68" />
+        <rect x="110" y="258" width="180" height="14" rx="7" fill="#1f1510" opacity=".6" />
+      </g>
+    )
+  }
+  {
+    kind === "leaf" && (
+      <g fill="none" stroke="#e9e3c9" stroke-width="3" stroke-linecap="round">
+        <path d="M80 250C120 120 220 60 330 50c-10 110-80 200-250 200z" fill="#a7b46f" stroke="none" opacity=".85" />
+        <path d="M80 250C160 180 230 120 330 50" />
+        <path d="M150 190l-6-50M200 150l-4-56M250 110l2-40M160 185l50 4M210 145l54 2" opacity=".8" />
+      </g>
+    )
+  }
+  {
+    kind === "fig" && (
+      <g>
+        <circle cx="170" cy="170" r="74" fill="#5b2442" />
+        <circle cx="170" cy="170" r="56" fill="#d8737e" />
+        <circle cx="170" cy="170" r="30" fill="#f2c0a8" />
+        {[0, 40, 80, 120, 160, 200, 240, 280, 320].map((deg) => (
+          <circle cx={170 + 22 * Math.cos((deg * Math.PI) / 180)} cy={170 + 22 * Math.sin((deg * Math.PI) / 180)} r="3" fill="#8d2f45" />
+        ))}
+        <path d="M270 120c30 0 52 30 52 66s-22 60-52 60-52-24-52-60 22-66 52-66z" fill="#6d2d52" />
+        <path d="M270 120c-4-18 2-30 14-38" stroke="#3e4a26" stroke-width="6" fill="none" stroke-linecap="round" />
+      </g>
+    )
+  }
+  {
+    kind === "plate" && (
+      <g>
+        <circle cx="200" cy="155" r="105" fill="#fbf7f0" />
+        <circle cx="200" cy="155" r="80" fill="none" stroke="#e2d3c0" stroke-width="3" />
+        <path d="M150 165c20-40 80-50 104-10-30 30-80 34-104 10z" fill="#a8401a" />
+        <circle cx="180" cy="135" r="9" fill="#56633a" />
+        <circle cx="222" cy="128" r="7" fill="#56633a" />
+        <circle cx="205" cy="178" r="6" fill="#f0bd68" />
+        <rect x="320" y="70" width="8" height="170" rx="4" fill="#6e5848" />
+        <rect x="68" y="70" width="8" height="170" rx="4" fill="#6e5848" />
+      </g>
+    )
+  }
+  {
+    kind === "glass" && (
+      <g>
+        <path d="M150 60h60c0 70-6 100-30 110-24-10-30-40-30-110z" fill="none" stroke="#f3e3d6" stroke-width="4" />
+        <path d="M153 105h54c-2 40-10 58-27 64-17-6-25-24-27-64z" fill="#b23a4f" />
+        <path d="M180 170v70M150 242h60" stroke="#f3e3d6" stroke-width="4" stroke-linecap="round" />
+        <path d="M250 80h50c0 60-5 86-25 94-20-8-25-34-25-94z" fill="none" stroke="#f3e3d6" stroke-width="4" />
+        <path d="M253 120h44c-2 32-8 46-22 52-14-6-20-20-22-52z" fill="#f0bd68" />
+        <path d="M275 174v62M250 238h50" stroke="#f3e3d6" stroke-width="4" stroke-linecap="round" />
+      </g>
+    )
+  }
+  {
+    kind === "bread" && (
+      <g>
+        <ellipse cx="200" cy="170" rx="130" ry="78" fill="#7a3f17" />
+        <ellipse cx="200" cy="160" rx="122" ry="70" fill="#a65a22" />
+        <path d="M120 130c20 10 30 40 24 70M180 112c18 14 24 50 16 84M240 112c18 14 22 50 14 84M296 130c-18 14-20 42-12 66" stroke="#f3d29a" stroke-width="7" fill="none" stroke-linecap="round" />
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .art {
+    width: 100%;
+    height: 100%;
+  }
+</style>

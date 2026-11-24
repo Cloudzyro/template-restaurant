@@ -1,0 +1,41 @@
+---
+// Shows "Open now until 10pm" and similar. Worked out in the visitor's browser
+// (in the restaurant's time zone) so it's always current on a static site.
+---
+
+<p class="today" data-hours-today>
+  <span class="dot" aria-hidden="true"></span>
+  <span data-text>Today's hours are below</span>
+</p>
+
+<script>
+  import { hours, site } from "../data/site";
+  import { todayStatus } from "../lib/hours";
+
+  document.querySelectorAll<HTMLElement>("[data-hours-today]").forEach((el) => {
+    const text = todayStatus(hours, site.timeZone);
+    el.querySelector("[data-text]")!.textContent = text;
+    el.classList.toggle("is-open", text.startsWith("Open now"));
+  });
+</script>
+
+<style>
+  .today {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0;
+    font-weight: 700;
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #c9b6a2;
+    flex: none;
+  }
+  .is-open .dot {
+    background: #7bd389;
+    box-shadow: 0 0 0 4px rgb(123 211 137 / 0.25);
+  }
+</style>

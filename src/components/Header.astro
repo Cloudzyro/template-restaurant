@@ -1,0 +1,185 @@
+---
+import { site } from "../data/site";
+
+const links = [
+  { href: "/menu/", label: "Menu" },
+  { href: "/about/", label: "About" },
+  { href: "/visit/", label: "Visit" },
+  { href: "/events/", label: "Private events" },
+];
+const path = Astro.url.pathname.replace(/\/?$/, "/");
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="/" aria-label={`${site.name}, home`}>
+      <svg viewBox="0 0 64 64" width="34" height="34" aria-hidden="true">
+        <path d="M32 6c5 10 16 15 16 31a16 16 0 0 1-32 0c0-9 5-13 8-19 1 5 4 8 6 9-1-9 0-15 2-21z" fill="currentColor"></path>
+      </svg>
+      <span>{site.name}</span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="visually-hidden">Open menu</span>
+      <span class="bars" aria-hidden="true"></span>
+    </button>
+    <nav id="site-nav" class="nav" aria-label="Main">
+      <ul>
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href} aria-current={path === l.href ? "page" : undefined}>
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="btn btn-primary nav-cta" href={site.reservationUrl}>{site.reservationLabel}</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>(".menu-toggle");
+  const nav = document.getElementById("site-nav");
+  toggle?.addEventListener("click", () => {
+    const open = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!open));
+    toggle.querySelector(".visually-hidden")!.textContent = open ? "Open menu" : "Close menu";
+    nav?.classList.toggle("open", !open);
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && nav?.classList.contains("open")) {
+      toggle?.click();
+      toggle?.focus();
+    }
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--cream) 88%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 72px;
+    gap: 1rem;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--ink);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .brand svg {
+    color: var(--ember);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+  }
+  .nav ul {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav ul a {
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.4rem 0;
+    border-bottom: 2px solid transparent;
+  }
+  .nav ul a:hover,
+  .nav ul a[aria-current="page"] {
+    border-color: var(--ember);
+  }
+  .menu-toggle {
+    display: none;
+    width: 48px;
+    height: 48px;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    border-radius: 12px;
+  }
+  .bars,
+  .bars::before,
+  .bars::after {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: currentColor;
+    margin: 0 auto;
+    position: relative;
+    transition: transform 0.2s ease;
+  }
+  .bars::before,
+  .bars::after {
+    content: "";
+    position: absolute;
+    left: 0;
+  }
+  .bars::before {
+    top: -7px;
+  }
+  .bars::after {
+    top: 7px;
+  }
+  [aria-expanded="true"] .bars {
+    background: transparent;
+  }
+  [aria-expanded="true"] .bars::before {
+    transform: translateY(7px) rotate(45deg);
+  }
+  [aria-expanded="true"] .bars::after {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  @media (max-width: 860px) {
+    .menu-toggle {
+      display: block;
+    }
+    .nav {
+      display: none;
+      position: absolute;
+      inset: 72px 0 auto 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+      padding: 1.25rem var(--gutter) 1.75rem;
+      background: var(--cream);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 20px 40px -20px rgb(42 29 21 / 0.35);
+    }
+    .nav.open {
+      display: flex;
+    }
+    .nav ul {
+      flex-direction: column;
+      gap: 0;
+    }
+    .nav ul a {
+      display: block;
+      padding: 0.85rem 0;
+      font-size: 1.2rem;
+      border-bottom: 1px solid var(--line);
+    }
+  }
+</style>

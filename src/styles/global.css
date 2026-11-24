@@ -1,0 +1,195 @@
+/* Colors and fonts live here. Change the variables to restyle the whole site. */
+:root {
+  --cream: #f5ede1;
+  --paper: #fbf7f0;
+  --ink: #2a1d15;
+  --ink-soft: #4a382c;
+  --muted: #6e5848;
+  --line: #e2d3c0;
+  --ember: #a8401a;
+  --ember-bright: #e0703d;
+  --gold: #f0bd68;
+  --olive: #56633a;
+  --night: #1f1510;
+
+  --font-display: "Fraunces Variable", Georgia, serif;
+  --font-body: "Manrope Variable", system-ui, sans-serif;
+
+  --radius: 18px;
+  --wrap: 1180px;
+  --gutter: clamp(16px, 4vw, 40px);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 560;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.5em;
+  font-variation-settings: "SOFT" 60, "WONK" 0;
+}
+
+h1 {
+  font-size: clamp(2.6rem, 7vw, 5.4rem);
+}
+
+h2 {
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+}
+
+h3 {
+  font-size: 1.35rem;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: var(--ember);
+  text-underline-offset: 3px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ember-bright);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.wrap {
+  width: min(var(--wrap), 100% - 2 * var(--gutter));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: clamp(64px, 10vw, 120px);
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ember);
+  margin-bottom: 1rem;
+}
+
+.lede {
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  color: var(--ink-soft);
+  max-width: 60ch;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: var(--ember);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #8f3513;
+}
+
+.btn-light {
+  background: var(--gold);
+  color: var(--night);
+}
+
+.btn-light:hover {
+  background: #f6cd86;
+}
+
+.btn-ghost {
+  border-color: currentColor;
+  color: inherit;
+  background: transparent;
+}
+
+.skip {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 100;
+  background: var(--ink);
+  color: #fff;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+}
+
+.skip:focus {
+  top: 1rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

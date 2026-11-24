@@ -1,0 +1,77 @@
+<svg class="hero-art" viewBox="0 0 520 560" aria-hidden="true">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="62%" r="55%">
+      <stop offset="0" stop-color="#f0bd68" stop-opacity=".55"></stop>
+      <stop offset=".5" stop-color="#e0703d" stop-opacity=".18"></stop>
+      <stop offset="1" stop-color="#e0703d" stop-opacity="0"></stop>
+    </radialGradient>
+    <linearGradient id="arch" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a2519"></stop>
+      <stop offset="1" stop-color="#140d09"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="260" cy="330" r="260" fill="url(#glow)"></circle>
+  <path d="M70 540V250a190 190 0 0 1 380 0v290z" fill="url(#arch)" stroke="#6b4632" stroke-width="3"></path>
+  <path d="M110 540V262a150 150 0 0 1 300 0v278z" fill="#0e0907"></path>
+  <g class="flames">
+    <path class="f1" d="M260 250c28 58 100 86 100 190a100 100 0 0 1-200 0c0-56 32-82 50-120 8 32 24 50 40 58-8-56 0-92 10-128z" fill="#c4521f"></path>
+    <path class="f2" d="M262 330c18 36 60 50 60 108a60 60 0 0 1-120 0c0-32 18-48 28-70 4 20 14 30 24 34-4-32 0-52 8-72z" fill="#e0703d"></path>
+    <path class="f3" d="M262 400c10 20 32 28 32 56a32 32 0 0 1-64 0c0-18 10-26 16-38 2 10 8 16 12 18-2-16 0-26 4-36z" fill="#f6d08a"></path>
+  </g>
+  <g fill="#5a3826">
+    <rect x="150" y="500" width="220" height="22" rx="11" transform="rotate(-6 260 511)"></rect>
+    <rect x="150" y="500" width="220" height="22" rx="11" transform="rotate(7 260 511)" fill="#6d4430"></rect>
+  </g>
+  <g fill="#f0bd68">
+    <circle class="spark s1" cx="230" cy="230" r="3"></circle>
+    <circle class="spark s2" cx="300" cy="200" r="2.5"></circle>
+    <circle class="spark s3" cx="270" cy="170" r="2"></circle>
+  </g>
+</svg>
+
+<style>
+  .hero-art {
+    width: 100%;
+    height: auto;
+  }
+  .flames path {
+    transform-origin: 260px 540px;
+    animation: flicker 3.2s ease-in-out infinite alternate;
+  }
+  .flames .f2 {
+    animation-duration: 2.4s;
+  }
+  .flames .f3 {
+    animation-duration: 1.8s;
+  }
+  .spark {
+    animation: rise 4s ease-in infinite;
+  }
+  .s2 {
+    animation-delay: 1.3s;
+  }
+  .s3 {
+    animation-delay: 2.6s;
+  }
+  @keyframes flicker {
+    from {
+      transform: scale(1, 1);
+    }
+    to {
+      transform: scale(0.97, 1.04) skewX(-1.5deg);
+    }
+  }
+  @keyframes rise {
+    from {
+      transform: translateY(40px);
+      opacity: 0;
+    }
+    30% {
+      opacity: 1;
+    }
+    to {
+      transform: translateY(-80px);
+      opacity: 0;
+    }
+  }
+</style>
