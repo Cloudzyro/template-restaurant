@@ -38,7 +38,7 @@ const featured = menu.find((s) => s.title === "From the fire")?.dishes.slice(0, 
         {
           home.highlights.map((h, i) => (
             <li>
-              <span class="num">0{i + 1}</span>
+              <span class="num">{i + 1}</span>
               <h3>{h.title}</h3>
               <p>{h.text}</p>
             </li>
@@ -149,9 +149,7 @@ const featured = menu.find((s) => s.title === "From the fire")?.dishes.slice(0, 
 
 <style>
   .hero {
-    background:
-      radial-gradient(70% 60% at 80% 70%, rgb(224 112 61 / 0.22), transparent 70%),
-      linear-gradient(180deg, #1f1510, #2b1c13);
+    background: var(--night);
     color: #f6eadb;
     overflow: hidden;
   }
@@ -201,6 +199,9 @@ const featured = menu.find((s) => s.title === "From the fire")?.dishes.slice(0, 
     width: 100%;
   }
 
+  .highlights {
+    padding-block: clamp(48px, 7vw, 80px);
+  }
   .hl-list {
     list-style: none;
     margin: 0;
@@ -211,9 +212,10 @@ const featured = menu.find((s) => s.title === "From the fire")?.dishes.slice(0, 
   }
   .num {
     font-family: var(--font-display);
-    font-size: 1rem;
+    font-size: 1.25rem;
     color: var(--ember);
-    font-weight: 700;
+    font-weight: 500;
+    line-height: 1;
     display: block;
     border-top: 2px solid var(--ink);
     padding-top: 1rem;
@@ -274,7 +276,6 @@ const featured = menu.find((s) => s.title === "From the fire")?.dishes.slice(0, 
   blockquote {
     margin: 0 0 1.25rem;
     font-family: var(--font-display);
-    font-style: italic;
     font-size: clamp(1.3rem, 2.4vw, 1.7rem);
     line-height: 1.35;
     color: var(--olive);
@@ -300,22 +301,19 @@ const featured = menu.find((s) => s.title === "From the fire")?.dishes.slice(0, 
     position: relative;
     height: 100%;
     min-height: 200px;
-    border-radius: var(--radius);
-    overflow: hidden;
     display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .gal-grid figure :global(.art) {
+    flex: 1;
+    min-height: 0;
+    border-radius: var(--radius);
   }
   .gal-grid figcaption {
-    position: absolute;
-    left: 12px;
-    bottom: 12px;
-    right: 12px;
-    background: rgb(31 21 16 / 0.78);
-    color: #fff;
-    font-size: 0.85rem;
-    font-weight: 600;
-    padding: 0.4rem 0.75rem;
-    border-radius: 10px;
-    width: fit-content;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.4;
   }
 
   .visit {

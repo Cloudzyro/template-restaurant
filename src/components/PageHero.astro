@@ -18,9 +18,8 @@ const { eyebrow, title, text } = Astro.props;
 
 <style>
   .page-hero {
-    background:
-      radial-gradient(60% 120% at 100% 0%, rgb(224 112 61 / 0.25), transparent 60%),
-      var(--night);
+    background: var(--night);
+    border-bottom: 1px solid rgb(255 255 255 / 0.08);
     color: #f6eadb;
     padding-block: clamp(56px, 9vw, 112px) clamp(40px, 6vw, 72px);
   }

@@ -37,7 +37,7 @@ import { formatTime } from "../lib/hours";
   const idx = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(name);
   document.querySelectorAll(`.hours-table tr[data-day="${idx}"]`).forEach((row) => {
     row.classList.add("is-today");
-    row.querySelector("th")?.insertAdjacentHTML("beforeend", ' <span class="today-tag">Today</span>');
+    row.querySelector("th")?.insertAdjacentHTML("beforeend", ' <span class="today-tag">today</span>');
   });
 </script>
 
@@ -49,9 +49,8 @@ import { formatTime } from "../lib/hours";
   }
   thead th {
     text-align: left;
-    font-size: 0.75rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    font-size: 0.875rem;
+    font-weight: 500;
     color: var(--muted);
     padding: 0 0 0.6rem;
   }
@@ -63,7 +62,7 @@ import { formatTime } from "../lib/hours";
     vertical-align: top;
   }
   tbody th {
-    font-weight: 700;
+    font-weight: 600;
     padding-right: 1rem;
     white-space: nowrap;
   }
@@ -83,14 +82,9 @@ import { formatTime } from "../lib/hours";
   }
   :global(.today-tag) {
     display: inline-block;
-    margin-left: 0.35rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    background: var(--ember);
-    color: #fff;
-    padding: 0.1rem 0.45rem;
-    border-radius: 999px;
-    vertical-align: middle;
+    margin-left: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--ember);
   }
 </style>

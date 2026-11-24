@@ -56,7 +56,7 @@ export const hours: Day[] = [
 ];
 
 export const home = {
-  heroTitle: "Slow fire, honest food.",
+  heroTitle: "Slow fire, honest food",
   heroText:
     "Seasonal plates cooked over oak and cherry wood, natural wines by the glass, and a dining room that feels like a friend's kitchen.",
   highlights: [
